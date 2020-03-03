@@ -15,7 +15,7 @@ const Allas = require('pg').Pool;
 const allas = new Allas(conopts);
 
 const haePisteet = (callback) => {
-    allas.query(" ", (pisteet) => {
+    allas.query("SELECT * FROM pisteet", (pisteet) => {
         callback(pisteet.rows);
     })
 }
@@ -36,7 +36,6 @@ const lisaaPisteet = (uudetpisteet, callback) => {
     })
 }
 
-
 const haeVastaukset = (callback) => {
     allas.query("sql", (vastaukset) => {
         callback(vastaukset.rows);
@@ -55,6 +54,5 @@ const haeKayttajat = (callback) => {
     })
 }
 */
-
 
 module.exports = {haePisteet};
