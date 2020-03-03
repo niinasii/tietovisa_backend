@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
+//haetaan dao-palvelu ja tallennetaan se muuttujaan
 var qs = require('./quizService');
 
-//get pisteet/
+//Get hakee maksimi pisteet sql-lauseella tietokannasta
 //Niina tehnyt pohjan, Laura jatkaa
 router.route('/pisteet')
   .get(function (req, res, next) {
@@ -20,7 +21,7 @@ router.route('/pisteet')
   .post(function (req, res, next) {
     qs.lisaaPisteet(req.body, (rowCount) => {
       if (rowCount > 0)
-        res.status(201).json({ message: 'Lisättiin' });
+        res.status(201).json({ message: 'Lisääminen onnistui' });
       else {
         res.status(400).json({ message: 'Lisääminen ei onnistunut' });
       }
