@@ -58,5 +58,17 @@ const lisaaPisteet = (uudetpisteet, callback) => { //parametriksi annetaan cb li
     })
 }
 
+//Hakee kaikki käyttäjänimet--Laura
+const kaikkiKayttajat = async () => {
+    let kayttajat = await allas.query("SELECT nimi from kayttajat")
+    return kayttajat.rows;
+}
+
+//Hakee kysymysten määrän--Laura
+const kysymystenMaara = async () => {
+    let maara = await allas.query("SELECT count(id) FROM kysymykset")
+    return maara.rows;
+}
+
 //exportataan funktiot dao-palvelusta, jotta quiz.js voi käyttää niitä -Niina
-module.exports = {haePisteet, lisaaPisteet, yhdenPisteet, haeKysymys};
+module.exports = {haePisteet, lisaaPisteet, yhdenPisteet, haeKysymys, kaikkiKayttajat, kysymystenMaara};
