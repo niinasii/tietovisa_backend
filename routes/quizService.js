@@ -21,7 +21,7 @@ const haeKysymykset = (callback) => {
 }
 
 const haePisteet = (callback) => {
-    allas.query(" sql", (pisteet) => {
+    allas.query("SELECT * FROM kysymykset", (pisteet) => {
         callback(pisteet.rows);
     })
 }
