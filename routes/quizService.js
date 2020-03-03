@@ -26,6 +26,16 @@ const haePisteet = (callback) => {
     })
 }
 
+const lisaaPisteet = (uudetpisteet, callback) => {
+    const { pisteet } = uudetpisteet;
+    allas.query("INSERT INTO taulu (pisteet) VALUES ($1)", [pisteet], (error, data) => {
+        if (error) throw error;
+        console.dir(data.rows);
+        callback(data.rowCount);
+    })
+}
+
+
 const haeVastaukset = (callback) => {
     allas.query("sql", (vastaukset) => {
         callback(vastaukset.rows);
@@ -44,4 +54,4 @@ const haeKayttajat = (callback) => {
     })
 }
 
-module.exports = {haeKysymykset, haePisteet, haeAihe, haeVastaukset, haeKayttajat};
+module.exports = {haeKysymykset, haePisteet, lisaaPisteet, haeAihe, haeVastaukset, haeKayttajat};
