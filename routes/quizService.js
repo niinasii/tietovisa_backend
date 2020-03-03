@@ -17,7 +17,9 @@ const conopts = {
 
 //luodaan uusi muuttuja antamalla sille arvoksi requirettu postgresmoduuli, jolla on build-in Pool-class -Niina
 const Allas = require('pg').Pool;
-const allas = new Allas(conopts);//konstruktoidaan Pool-classin ja conopts-tietojen pohjalta uusi muuttuja.
+
+//konstruktoidaan Pool-classin ja conopts-tietojen pohjalta uusi muuttuja -Niina.
+const allas = new Allas(conopts);
 
 //Hakee jokaisen käyttäjän maximipisteet tietokannasta--Laura
 const haePisteet = async () => {
