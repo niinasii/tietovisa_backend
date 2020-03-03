@@ -14,18 +14,19 @@ const conopts = {
 const Allas = require('pg').Pool;
 const allas = new Allas(conopts);
 
+const haePisteet = (callback) => {
+    allas.query(" ", (pisteet) => {
+        callback(pisteet.rows);
+    })
+}
+
+/*
+
 const haeKysymykset = (callback) => {
     allas.query(" sql ", (kysymykset) => {
         callback(kysymykset.rows);
     })
 }
-
-const haePisteet = (callback) => {
-    allas.query(" sql", (pisteet) => {
-        callback(pisteet.rows);
-    })
-}
-
 const lisaaPisteet = (uudetpisteet, callback) => {
     const { pisteet } = uudetpisteet;
     allas.query("INSERT INTO taulu (pisteet) VALUES ($1)", [pisteet], (error, data) => {
@@ -53,5 +54,7 @@ const haeKayttajat = (callback) => {
         callback(kayttaja.rows);
     })
 }
+*/
 
-module.exports = {haeKysymykset, haePisteet, lisaaPisteet, haeAihe, haeVastaukset, haeKayttajat};
+
+module.exports = {haePisteet};
