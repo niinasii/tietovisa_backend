@@ -19,7 +19,7 @@ router.route('/pisteet')
   .post(function (req, res, next) {
     qs.lisaaPisteet(req.body, (rowCount) => {
       if (rowCount > 0)
-        res.status(201).json({ message: 'Lisättiin' });
+        res.status(201).json({ message: 'Lisääminen onnistui' });
       else {
         res.status(400).json({ message: 'Lisääminen ei onnistunut' });
       }

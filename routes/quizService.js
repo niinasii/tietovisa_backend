@@ -23,5 +23,14 @@ const haePisteet = (callback) => {
     })
 }
 
+const lisaaPisteet = (uudetpisteet, callback) => {
+    const {kayttaja_id, pisteet, pvm} = uudetpisteet
+    allas.query("INSERT INTO pisteet (kayttaja_id, pisteet, pvm) VALUES ($1, $2, $3)", [kayttaja_id, pisteet, pvm], (error, pisteet) => {
+        if (error) throw error;
+        console.dir(pisteet.rows);
+        callback(pisteet.rowCount);
+    })
+}
 
-module.exports = {haePisteet};
+
+module.exports = {haePisteet, lisaaPisteet};
