@@ -1,9 +1,19 @@
 var express = require('express');
 var router = express.Router();
+var qs = require('./quizService');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.route('/score')
+  .get(function (req, res, next) {
+    qs.haePisteet(rows => {
+      res.json(rows);
+    });
+  });
+
+router.route('/kysymykset')
+  .get(function (req, res, next) {
+    qs.haeKysymykset(rows => {
+      res.json(rows);
+    });
+  });
 
 module.exports = router;
