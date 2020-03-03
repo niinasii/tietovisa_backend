@@ -26,4 +26,22 @@ const haePisteet = (callback) => {
     })
 }
 
-module.exports = {haeKysymykset, haePisteet, haeAiheet};
+const haeVastaukset = (callback) => {
+    allas.query("sql", (vastaukset) => {
+        callback(vastaukset.rows);
+    })
+}
+
+const haeAihe = (callback) => {
+    allas.query("sql", (aihe) => {
+        callback(aihe.rows);
+    })
+}
+
+const haeKayttajat = (callback) => {
+    allas.query("sql", (kayttaja) => {
+        callback(kayttaja.rows);
+    })
+}
+
+module.exports = {haeKysymykset, haePisteet, haeAihe, haeVastaukset, haeKayttajat};
