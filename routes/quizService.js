@@ -4,6 +4,8 @@ const salasana = process.env.PGPASSWORD; //tässä envin prosessoimalle muuttuja
 const tunnusnimi = process.env.PGUSER; //PGUSER vastaa env-tiedostosta olevaa PGUSER=käyttäjänimi
 const hostaaja = process.env.PGHOST;
 const tietokanta = process.env.PGDB;
+const { Kysymys, Vastaus } = require('./kysymykset');
+
 
 //seuraavaksi luodaan conopts-olio tietokannan yhteystiedoista -Niina
 const conopts = {
@@ -19,14 +21,33 @@ const Allas = require('pg').Pool;
 //konstruktoidaan Pool-classin ja conopts-tietojen pohjalta uusi muuttuja.
 const allas = new Allas(conopts);
 
-//Hakee pisteet tietokannasta pisteet-taulusta -Niina
-const haePisteet = (callback) => {
-    allas.query("SELECT * FROM pisteet", (error, pisteet) => {
-        if (error) throw error; //jos tulee error niin antaa error tiedot meille
-        console.dir(pisteet.rows);
-        callback(pisteet.rows);
-    })
+//Hakee jokaisen käyttäjän maximipisteet tietokannasta--Laura
+const haePisteet = async () => {
+    let pisteet = await allas.query("SELECT max(p.pisteet) AS maximit, p.kayttaja_id, k.nimi from pisteet AS p, kayttajat AS k WHERE k.id = p.kayttaja_id GROUP BY p.kayttaja_id, k.nimi ORDER BY maximit DESC")
+    return pisteet.rows;
 }
+
+//Hakee yhden käyttäjän kaikki pisteet tietokannasta--Laura
+const yhdenPisteet = async (nimi) => {
+    let munPisteet = await allas.query("SELECT k.nimi, p.pisteet, p.pvm from kayttajat as k, pisteet as p WHERE k.id = p.kayttaja_id AND k.nimi = $1", [nimi])
+    return munPisteet.rows
+}
+
+//Hakee kysymyksen sekä siihen liittyvät vastaukset kysymys-id:n perusteella
+haeKysymys = async (id) => {
+    let kysymys = await allas.query("SELECT k.id, k.kysymys, v.vastaus, v.oikein FROM kysymykset as k, vastaukset as v WHERE v.kysymys_id = k.id AND k.id = $1", [id])
+    const k = kysymys.rows
+    if (k == '') {
+        return 'Id ei ole validi!'
+    } else {
+    const vastauxet = [];
+    for (let i = 0; i < k.length; i++) {
+        let v = k[i];
+        vastauxet.push({ vastaus: v.vastaus, oikein: v.oikein })
+    }
+    let helaHoito = [new Kysymys(k[0].id, k[0].kysymys, vastauxet)];
+    return helaHoito;
+}}
 
 const lisaaPisteet = (uudetpisteet, callback) => { //parametriksi annetaan cb lisäksi olio -Niina
     const {kayttaja_id, pisteet, pvm} = uudetpisteet //tässä luodaan olio properteilla, seuraavaksi insertoidaan sarakkeisiin tiedot
@@ -38,4 +59,4 @@ const lisaaPisteet = (uudetpisteet, callback) => { //parametriksi annetaan cb li
 }
 
 //exportataan funktiot dao-palvelusta, jotta quiz.js voi käyttää niitä -Niina
-module.exports = {haePisteet, lisaaPisteet};
+module.exports = {haePisteet, lisaaPisteet, yhdenPisteet, haeKysymys};

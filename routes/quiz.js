@@ -3,20 +3,19 @@ var router = express.Router();
 //haetaan dao-palvelu ja tallennetaan se muuttujaan
 var qs = require('./quizService');
 
-//Get hakee maksimi pisteet sql-lauseella tietokannasta
-//Niina tehnyt pohjan, Laura jatkaa
+//Hakee jokaisen käyttäjän maximipisteet tietokannasta--Laura
 router.route('/pisteet')
-  .get(function (req, res, next) {
-    qs.haePisteet(rows => {
-      res.json(rows);
-    });
+  .get(async (req, res, next) => {
+    try {
+      let pisteet = await qs.haePisteet()
+      res.json(pisteet)
+    } catch (error) {
+      throw error
+    }
   })
 
-// get pisteet/:kayttaja käyttäjän perusteella pisteet
-//Laura
-
-// post pisteet/ kayttaja id ja pistemäärä + päivämäärä
-//Niina tekee postin
+  // post pisteet/ kayttaja id ja pistemäärä + päivämäärä
+  //Niina tekee postin
   .post(function (req, res, next) {
     qs.lisaaPisteet(req.body, (rowCount) => {
       if (rowCount > 0)
@@ -27,13 +26,32 @@ router.route('/pisteet')
     });
   });
 
-// get kysymys/:kysymysid hakee yhden kysymys ja kaikki vastausehdotukset
-//Laura tekee getin
-router.route('/kysymykset')
-  .get(function (req, res, next) {
-    qs.haeKysymykset(rows => {
-      res.json(rows);
-    });
+
+//Hakee yhden käyttäjän kaikki pisteet tietokannasta--Laura
+router.route('/pisteet/:nimi')
+  .get(async (req, res, next) => {
+    try {
+      let munPisteet = await qs.yhdenPisteet(req.params.nimi)
+      if (munPisteet == '') {
+        res.json({ message: 'Käyttäjää ei löydy'})
+      } else {
+        res.json(munPisteet)
+      }
+    } catch (error) {
+      throw error
+    }
+  });
+
+
+//Hakee kysymyksen sekä siihen liittyvät vastaukset kysymys-id:n perusteella
+router.route('/kysymykset/:id')
+  .get(async (req, res, next) => {
+    try {
+      let kysymys = await qs.haeKysymys(req.params.id)
+      res.json(kysymys)
+    } catch (error) {
+      throw error
+    }
   });
 
 
