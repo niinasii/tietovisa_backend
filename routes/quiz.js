@@ -33,7 +33,7 @@ router.route('/pisteet/:nimi')
     try {
       let munPisteet = await qs.yhdenPisteet(req.params.nimi)
       if (munPisteet == '') {
-        res.json({ message: 'Käyttäjää ei löydy'})
+        res.json({ message: 'Käyttäjää ei löydy' })
       } else {
         res.json(munPisteet)
       }
@@ -53,6 +53,29 @@ router.route('/kysymykset/:id')
       throw error
     }
   });
+
+//Hakee kysymysten määrän--Laura
+router.route('/kysymykset')
+  .get(async (req, res, next) => {
+    try {
+      let maara = await qs.kysymystenMaara()
+      res.json(maara);
+    } catch (error) {
+      throw error
+    }
+  })
+
+//Hakee kaikki käyttäjänimet--Laura
+router.route('/kayttajat')
+  .get(async (req, res, next) => {
+    try {
+      let kayttajat = await qs.kaikkiKayttajat()
+      res.json(kayttajat)
+    } catch (error) {
+      throw error
+    }
+  })
+
 
 
 module.exports = router;
