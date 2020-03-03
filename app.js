@@ -6,7 +6,6 @@ var logger = require('morgan');
 var cors = require('cors');
 
 var quizRouter = require('./routes/quiz');
-
 var app = express();
 
 // view engine setup
@@ -20,7 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/quiz', quizRouter);
+app.use('/api/quiz', quizRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
