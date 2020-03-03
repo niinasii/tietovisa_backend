@@ -3,7 +3,7 @@ var router = express.Router();
 var qs = require('./quizService');
 
 //get pisteet/
-router.route('/pisteet') //hakee highscoren
+router.route('/pisteet')
   .get(function (req, res, next) {
     qs.haePisteet(rows => {
       res.json(rows);
