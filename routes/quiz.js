@@ -76,6 +76,13 @@ router.route('/kayttajat')
     }
   })
 
-
+  .post(async(req, res, next) => {
+    try {
+      let uusi = await qs.uusiKayttaja(req.body.nimi)
+      res.json(uusi)
+    } catch (error) {
+      throw error
+    }
+  })
 
 module.exports = router;

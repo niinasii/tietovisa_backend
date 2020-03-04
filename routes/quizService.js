@@ -4,7 +4,7 @@ const salasana = process.env.PGPASSWORD; //tässä envin prosessoimalle muuttuja
 const tunnusnimi = process.env.PGUSER; //PGUSER vastaa env-tiedostosta olevaa PGUSER=käyttäjänimi
 const hostaaja = process.env.PGHOST;
 const tietokanta = process.env.PGDB;
-const { Kysymys, Vastaus } = require('./kysymykset');
+const { Kysymys } = require('./kysymykset');
 
 
 //seuraavaksi luodaan conopts-olio tietokannan yhteystiedoista -Niina
@@ -21,7 +21,7 @@ const allas = new Allas(conopts);//konstruktoidaan Pool-classin ja conopts-tieto
 
 //Hakee jokaisen käyttäjän maximipisteet tietokannasta--Laura
 const haePisteet = async () => {
-    let pisteet = await allas.query("SELECT max(p.pisteet) AS maximit, p.kayttaja_id, k.nimi from pisteet AS p, kayttajat AS k WHERE k.id = p.kayttaja_id GROUP BY p.kayttaja_id, k.nimi ORDER BY maximit DESC")
+    let pisteet = await allas.query("SELECT max(p.pisteet) AS maximit, p.pvm, p.kayttaja_id, k.nimi from pisteet AS p, kayttajat AS k WHERE k.id = p.kayttaja_id GROUP BY p.kayttaja_id, k.nimi, p.pvm ORDER BY maximit DESC")
     return pisteet.rows;
 }
 
@@ -68,5 +68,10 @@ const kysymystenMaara = async () => {
     return maara.rows;
 }
 
+const uusiKayttaja = async (nimi) => {
+    await allas.query("INSERT INTO kayttajat(nimi)VALUES ($1)", [nimi]);
+    return `Käyttäjä nimimerkillä ${nimi} luotu`;
+}
+
 //exportataan funktiot dao-palvelusta, jotta quiz.js voi käyttää niitä -Niina
-module.exports = {haePisteet, lisaaPisteet, yhdenPisteet, haeKysymys, kaikkiKayttajat, kysymystenMaara};
+module.exports = {haePisteet, lisaaPisteet, yhdenPisteet, haeKysymys, kaikkiKayttajat, kysymystenMaara, uusiKayttaja};
