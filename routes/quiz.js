@@ -76,6 +76,4 @@ router.route('/kayttajat')
     }
   })
 
-
-
 module.exports = router;
