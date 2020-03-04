@@ -23,7 +23,7 @@ const allas = new Allas(conopts);
 
 //Hakee jokaisen käyttäjän maximipisteet tietokannasta--Laura
 const haePisteet = async () => {
-    let pisteet = await allas.query("SELECT max(p.pisteet) AS maximit, p.pvm, p.kayttaja_id, k.nimi from pisteet AS p, kayttajat AS k WHERE k.id = p.kayttaja_id GROUP BY p.kayttaja_id, k.nimi, p.pvm ORDER BY maximit DESC")
+    let pisteet = await allas.query("SELECT max(p.pisteet) AS maximit, k.nimi FROM pisteet AS p JOIN kayttajat AS k on k.id = p.kayttaja_id GROUP BY k.nimi ORDER BY maximit DESC")
     return pisteet.rows;
 }
 
@@ -49,19 +49,24 @@ haeKysymys = async (id) => {
     return helaHoito;
 }}
 
-const lisaaPisteet = (uudetpisteet, callback) => { //parametriksi annetaan cb lisäksi olio -Niina
-    const {kayttaja_id, pisteet, pvm} = uudetpisteet //tässä luodaan olio properteilla, seuraavaksi insertoidaan sarakkeisiin tiedot
-    allas.query("INSERT INTO pisteet (kayttaja_id, pisteet, pvm) VALUES ($1, $2, $3)", [kayttaja_id, pisteet, pvm], (error, pisteet) => {
-        if (error) throw error;
-        console.dir(pisteet.rows); //insertoitua dataa referoidaan pisteet-nimellä
-        callback(pisteet.rowCount);
-    })
-}
+// const lisaaPisteet = (uudetpisteet, callback) => { //parametriksi annetaan cb lisäksi olio -Niina
+//     const {kayttaja_id, pisteet, pvm} = uudetpisteet //tässä luodaan olio properteilla, seuraavaksi insertoidaan sarakkeisiin tiedot
+//     allas.query("INSERT INTO pisteet (kayttaja_id, pisteet, pvm) VALUES ($1, $2, $3)", [kayttaja_id, pisteet, pvm], (error, pisteet) => {
+//         if (error) throw error;
+//         console.dir(pisteet.rows); //insertoitua dataa referoidaan pisteet-nimellä
+//         callback(pisteet.rowCount);
+//     })
+// }
 
 //Hakee kaikki käyttäjänimet--Laura
 const kaikkiKayttajat = async () => {
     let kayttajat = await allas.query("SELECT nimi from kayttajat")
     return kayttajat.rows;
+}
+
+const uudetPisteet = async (nimi, pointsit, pvm) => {
+    let pisteet = await allas.query("INSERT INTO pisteet (pisteet, pvm, kayttaja_id) VALUES ($1, $2, (SELECT DISTINCT k.id FROM kayttajat as k, pisteet as p WHERE k.nimi = $3))", [pointsit, pvm, nimi])
+    return `Käyttäjälle ${nimi} on lisätty ${pointsit} pistettä tänään ${pvm}.`
 }
 
 //Hakee kysymysten määrän--Laura
@@ -76,4 +81,4 @@ const uusiKayttaja = async (nimi) => {
 }
 
 //exportataan funktiot dao-palvelusta, jotta quiz.js voi käyttää niitä -Niina
-module.exports = {haePisteet, lisaaPisteet, yhdenPisteet, haeKysymys, kaikkiKayttajat, kysymystenMaara, uusiKayttaja};
+module.exports = {haePisteet, yhdenPisteet, haeKysymys, kaikkiKayttajat, kysymystenMaara, uusiKayttaja, uudetPisteet};
