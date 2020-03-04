@@ -15,12 +15,12 @@ Käynnistä palvelin komennolla:
 ### `npm start`
 
 Palvelin pyörii oletusarvoisesti portissa 3000 <br />
-Avaa: [http://localhost:3000] (http://localhost:3000)
+Avaa: (http://localhost:3000)
 
 ## Front-End
 
 Tämän back-end repon front-end vastinkappale on ulkoisessa repossa:
-[https://github.com/TittaKujala/tietovisa_frontend] (https://github.com/TittaKujala/tietovisa_frontend)
+(https://github.com/TittaKujala/tietovisa_frontend)
 
 ## Tiimi
 Titta Kujala, Oskari Auvinen, Laura Kankaanpää, Niina Siitari.
