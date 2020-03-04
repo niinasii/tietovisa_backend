@@ -15,17 +15,26 @@ router.route('/pisteet')
   })
 
   // post pisteet/ kayttaja id ja pistemäärä + päivämäärä
-  //Niina tekee postin
-  .post(function (req, res, next) {
-    qs.lisaaPisteet(req.body, (rowCount) => {
-      if (rowCount > 0)
-        res.status(201).json({ message: 'Lisääminen onnistui' });
-      else {
-        res.status(400).json({ message: 'Lisääminen ei onnistunut' });
-      }
-    });
-  });
+  // //Niina tekee postin
+  // .post(function (req, res, next) {
+  //   qs.lisaaPisteet(req.body, (rowCount) => {
+  //     if (rowCount > 0)
+  //       res.status(201).json({ message: 'Lisääminen onnistui' });
+  //     else {
+  //       res.status(400).json({ message: 'Lisääminen ei onnistunut' });
+  //     }
+  //   });
+  // });
 
+  //Lisää pisteet käyttäjänimen perusteella tietokannan pisteet-taulukkoon--Laura
+  .post(async (req, res, next) => {
+    try {
+      paivitys = await qs.uudetPisteet(req.body.nimi, req.body.pisteet, req.body.pvm)
+        res.json(paivitys)
+    } catch (error) {
+      throw error
+    }
+  })
 
 //Hakee yhden käyttäjän kaikki pisteet tietokannasta--Laura
 router.route('/pisteet/:nimi')
@@ -76,7 +85,7 @@ router.route('/kayttajat')
     }
   })
 
-  .post(async(req, res, next) => {
+  .post(async (req, res, next) => {
     try {
       let uusi = await qs.uusiKayttaja(req.body.nimi)
       res.json(uusi)
