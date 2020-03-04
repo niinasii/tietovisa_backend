@@ -8,7 +8,7 @@ test('Saamme haettua getillä kaikki käyttäjät', (done) => {
         .get(baseurl+'/kayttajat')
         .then(response => {
             expect(response.statusCode).toBe(200);
-            //expect(response.body.length).toBe(4); //testidata on neljän käyttäjän maximipisteet
+            //expect(response.body.length).toBe(4);
             done();
         })
 });

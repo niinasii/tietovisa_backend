@@ -24,19 +24,6 @@ test('Saamme haettu yhden käyttäjän kaikki pisteet', (done) => {
         })
 });
 
-// //testattava post on callback
-
-// //testikoodi feilaa tässä tarkoituksella 
-// test('a single scooter with incorrect id will return 404', (done) => {
-//     request(app)
-//         .get(`${baseurl}/0`)
-//         .then(response => {
-//             expect(response.statusCode).toBe(404);
-//             done();
-//         })
-// });
-
-
 // test('we can add a new scoot', (done) => {
 //     const dummyscoot = {
 //         model: { id: 2, name: 'Glion' },

@@ -8,7 +8,7 @@ test('Saamme haettua getillä kysymysten määrän', (done) => {
         .get(baseurl+'/kysymykset')
         .then(response => {
             expect(response.statusCode).toBe(200);
-            //expect(response.body.length).toBe(4); //testidata on neljän käyttäjän maximipisteet
+            expect([{"count": "3"}]).toEqual(response.body); //testidata 3 kysymystä
             done();
         })
 });
@@ -18,7 +18,6 @@ test('Saamme haettua getillä tietyn kysymyksen ja kaikki vastausvaihtoehdot', (
         .get(baseurl+'/kysymykset/1')
         .then(response => {
             expect(response.statusCode).toBe(200);
-            //expect(response.body.length).toBe(4); //testidata on neljän käyttäjän maximipisteet
             done();
         })
 });
