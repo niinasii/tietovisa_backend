@@ -17,6 +17,12 @@ Käynnistä palvelin komennolla:
 Palvelin pyörii oletusarvoisesti portissa 3000 <br />
 Avaa: (http://localhost:3000)
 
+## Testaus
+
+Back-End puolta voidaan testata kolmella test suitella (Jest + supertest). Expected vastaus pohjaa testidataan, joka sijaitsee data.sql tiedostossa. Alusta tietokanta ja taulu, sillä datalla, jos haluat testien toimivan ilman manuaalisia muutoksia.
+
+### `npm test`
+
 ## Front-End
 
 Tämän back-end repon front-end vastinkappale on ulkoisessa repossa:
