@@ -69,7 +69,7 @@ const kaikkiKayttajat = async () => {
 
 //Lisaa uudet pisteet tietokantaan--Laura
 const uudetPisteet = async (nimi, pointsit, pvm) => {
-    let pisteet = await allas.query("INSERT INTO pisteet (pisteet, pvm, kayttaja_id) VALUES ($1, $2, (SELECT DISTINCT k.id FROM kayttajat as k, pisteet as p WHERE k.nimi = $3))", [pointsit, pvm, nimi])
+    let pisteet = await allas.query("INSERT INTO pisteet (pisteet, pvm, kayttaja_id) VALUES ($1, $2, (SELECT DISTINCT k.id FROM kayttajat as k WHERE k.nimi = $3))", [pointsit, pvm, nimi])
     return `Käyttäjälle ${nimi} on lisätty ${pointsit} pistettä tänään ${pvm}.`
 }
 
