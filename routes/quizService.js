@@ -21,8 +21,20 @@ const Allas = require('pg').Pool;
 //konstruktoidaan Pool-classin ja conopts-tietojen pohjalta uusi muuttuja -Niina.
 const allas = new Allas(conopts);
 
-//Hakee jokaisen käyttäjän maximipisteet tietokannasta--Laura
+//Hakee kaikki pisteet ja käyttäjien nimimerkit-Laura
 const haePisteet = async () => {
+    let pisteet = await allas.query("SELECT p.id, p.pisteet, k.nimi, p.pvm FROM pisteet AS p JOIN kayttajat AS k on k.id = p.kayttaja_id ORDER BY p.pisteet DESC LIMIT 20")
+    return pisteet.rows;
+}
+
+//Hakee kaikki pisteet ja käyttäjien nimimerkit-Laura
+const haeKuukaudenPisteet = async (mm, yy) => {
+    let pisteet = await allas.query("SELECT p.id, p.pisteet, k.nimi, p.pvm FROM pisteet AS p JOIN kayttajat AS k on k.id = p.kayttaja_id WHERE EXTRACT(MONTH FROM pvm) = $1 AND EXTRACT(YEAR FROM pvm) = $2 ORDER BY p.pisteet DESC LIMIT 5", [mm, yy])
+    return pisteet.rows;
+}
+
+//Hakee jokaisen käyttäjän maximipisteet tietokannasta--Laura
+const haeTopPisteet = async () => {
     let pisteet = await allas.query("SELECT max(p.pisteet) AS maximit, p.kayttaja_id, k.nimi FROM pisteet AS p JOIN kayttajat AS k on k.id = p.kayttaja_id GROUP BY p.kayttaja_id, k.nimi ORDER BY maximit DESC LIMIT 5")
     return pisteet.rows;
 }
@@ -74,4 +86,4 @@ const uusiKayttaja = async (nimi) => {
 }
 
 //exportataan funktiot dao-palvelusta, jotta quiz.js voi käyttää niitä -Niina
-module.exports = {haePisteet, yhdenPisteet, haeKysymys, kaikkiKayttajat, kysymystenMaara, uusiKayttaja, uudetPisteet};
+module.exports = {haePisteet, haeTopPisteet, haeKuukaudenPisteet, yhdenPisteet, haeKysymys, kaikkiKayttajat, kysymystenMaara, uusiKayttaja, uudetPisteet};
