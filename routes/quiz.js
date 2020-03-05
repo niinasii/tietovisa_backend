@@ -7,7 +7,7 @@ var qs = require('./quizService');
 router.route('/pisteet')
   .get(async (req, res, next) => {
     try {
-      let pisteet = await qs.haePisteet()
+      let pisteet = await qs.haeTopPisteet()
       res.json(pisteet)
     } catch (error) {
       throw error
@@ -18,7 +18,29 @@ router.route('/pisteet')
   .post(async (req, res, next) => {
     try {
       paivitys = await qs.uudetPisteet(req.body.nimi, req.body.pisteet, req.body.pvm)
-        res.json(paivitys)
+      res.json(paivitys)
+    } catch (error) {
+      throw error
+    }
+  })
+
+//Hakee jokaisen käyttäjän maximipisteet tietokannasta--Laura
+router.route('/pisteet/:kk/:yyyy')
+  .get(async (req, res, next) => {
+    try {
+      let pisteet = await qs.haeKuukaudenPisteet(req.params.kk, req.params.yyyy)
+      res.json(pisteet)
+    } catch (error) {
+      throw error
+    }
+  })
+
+//Hakee kaikki pisteet ja käyttäjien nimimerkit--Laura
+router.route('/kaikkipisteet')
+  .get(async (req, res, next) => {
+    try {
+      let pisteet = await qs.haePisteet()
+      res.json(pisteet)
     } catch (error) {
       throw error
     }
