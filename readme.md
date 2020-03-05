@@ -14,8 +14,8 @@ Käynnistä palvelin komennolla:
 
 ### `npm start`
 
-Palvelin pyörii oletusarvoisesti portissa 3000 <br />
-Avaa: (http://localhost:3000)
+Palvelin pyörii oletusarvoisesti portissa 8000 <br />
+Avaa: (http://localhost:8000)
 
 ## Testaus
 
