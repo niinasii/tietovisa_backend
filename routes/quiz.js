@@ -7,25 +7,44 @@ var qs = require('./quizService');
 router.route('/pisteet')
   .get(async (req, res, next) => {
     try {
-      let pisteet = await qs.haePisteet()
+      let pisteet = await qs.haeTopPisteet()
       res.json(pisteet)
     } catch (error) {
       throw error
     }
   })
 
-  // post pisteet/ kayttaja id ja pistemäärä + päivämäärä
-  //Niina tekee postin
-  .post(function (req, res, next) {
-    qs.lisaaPisteet(req.body, (rowCount) => {
-      if (rowCount > 0)
-        res.status(201).json({ message: 'Lisääminen onnistui' });
-      else {
-        res.status(400).json({ message: 'Lisääminen ei onnistunut' });
-      }
-    });
-  });
+  //Lisää pisteet käyttäjänimen perusteella tietokannan pisteet-taulukkoon--Laura
+  .post(async (req, res, next) => {
+    try {
+      paivitys = await qs.uudetPisteet(req.body.nimi, req.body.pisteet, req.body.pvm)
+      res.json(paivitys)
+    } catch (error) {
+      throw error
+    }
+  })
 
+//Hakee jokaisen käyttäjän maximipisteet tietokannasta--Laura
+router.route('/pisteet/:kk/:yyyy')
+  .get(async (req, res, next) => {
+    try {
+      let pisteet = await qs.haeKuukaudenPisteet(req.params.kk, req.params.yyyy)
+      res.json(pisteet)
+    } catch (error) {
+      throw error
+    }
+  })
+
+//Hakee kaikki pisteet ja käyttäjien nimimerkit--Laura
+router.route('/kaikkipisteet')
+  .get(async (req, res, next) => {
+    try {
+      let pisteet = await qs.haePisteet()
+      res.json(pisteet)
+    } catch (error) {
+      throw error
+    }
+  })
 
 //Hakee yhden käyttäjän kaikki pisteet tietokannasta--Laura
 router.route('/pisteet/:nimi')
@@ -43,7 +62,7 @@ router.route('/pisteet/:nimi')
   });
 
 
-//Hakee kysymyksen sekä siihen liittyvät vastaukset kysymys-id:n perusteella
+//Hakee kysymyksen sekä siihen liittyvät vastaukset kysymys-id:n perusteella--Laura
 router.route('/kysymykset/:id')
   .get(async (req, res, next) => {
     try {
@@ -54,7 +73,7 @@ router.route('/kysymykset/:id')
     }
   });
 
-//Hakee kysymysten määrän--Laura
+//Hakee kysymysten lukumäärän--Laura
 router.route('/kysymykset')
   .get(async (req, res, next) => {
     try {
@@ -76,7 +95,8 @@ router.route('/kayttajat')
     }
   })
 
-  .post(async(req, res, next) => {
+  //Lisää uuden kyttäjän tietokantaan--Laura
+  .post(async (req, res, next) => {
     try {
       let uusi = await qs.uusiKayttaja(req.body.nimi)
       res.json(uusi)
