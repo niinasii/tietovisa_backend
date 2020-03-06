@@ -46,8 +46,8 @@ const yhdenPisteet = async (nimi) => {
 }
 
 //Hakee kysymyksen sekä siihen liittyvät vastaukset kysymys-id:n perusteella
-haeKysymykset = async () => {
-    let kysymys = await allas.query("SELECT distinct k.id, k.kysymys, v.vastaus, v.id as vastaus_id, v.oikein FROM kysymykset as k, vastaukset as v WHERE v.kysymys_id = k.id AND k.id = (SELECT id FROM kysymykset ORDER BY RANDOM() LIMIT 1)")
+haeKysymykset = async (id) => {
+    let kysymys = await allas.query("SELECT distinct k.id, k.kysymys, v.vastaus, v.id as vastaus_id, v.oikein FROM kysymykset as k, vastaukset as v WHERE v.kysymys_id = k.id AND k.id = $1", [id])
     const k = kysymys.rows
     const vastauxet = [];
     for (let i = 0; i < k.length; i++) {
@@ -72,7 +72,7 @@ const uudetPisteet = async (nimi, pointsit, pvm) => {
 
 //Hakee kysymysten lukumäärän--Laura
 const kysymystenMaara = async () => {
-    let maara = await allas.query("SELECT count(id) FROM kysymykset")
+    let maara = await allas.query("SELECT id FROM kysymykset ORDER BY RANDOM() LIMIT 5")
     return maara.rows;
 }
 
