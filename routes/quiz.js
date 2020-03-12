@@ -66,7 +66,7 @@ router.route('/pisteet/:nimi')
 router.route('/kysymykset/:id')
   .get(async (req, res, next) => {
     try {
-      let kysymys = await qs.haeKysymys(req.params.id)
+      let kysymys = await qs.haeKysymykset(req.params.id)
       res.json(kysymys)
     } catch (error) {
       throw error
@@ -74,7 +74,7 @@ router.route('/kysymykset/:id')
   });
 
 //Hakee kysymysten lukumäärän--Laura
-router.route('/kysymykset')
+router.route('/kysymysmaara')
   .get(async (req, res, next) => {
     try {
       let maara = await qs.kysymystenMaara()

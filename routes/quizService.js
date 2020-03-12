@@ -46,20 +46,17 @@ const yhdenPisteet = async (nimi) => {
 }
 
 //Hakee kysymyksen sekä siihen liittyvät vastaukset kysymys-id:n perusteella
-haeKysymys = async (id) => {
-    let kysymys = await allas.query("SELECT k.id, k.kysymys, v.vastaus, v.oikein FROM kysymykset as k, vastaukset as v WHERE v.kysymys_id = k.id AND k.id = $1", [id])
+haeKysymykset = async (id) => {
+    let kysymys = await allas.query("SELECT distinct k.id, k.kysymys, v.vastaus, v.id as vastaus_id, v.oikein FROM kysymykset as k, vastaukset as v WHERE v.kysymys_id = k.id AND k.id = $1", [id])
     const k = kysymys.rows
-    if (k == '') {
-        return 'Id ei ole validi!'
-    } else {
     const vastauxet = [];
     for (let i = 0; i < k.length; i++) {
         let v = k[i];
-        vastauxet.push({ vastaus: v.vastaus, oikein: v.oikein })
+        vastauxet.push({ id: v.vastaus_id, vastaus: v.vastaus, oikein: v.oikein })
     }
     let helaHoito = [new Kysymys(k[0].id, k[0].kysymys, vastauxet)];
     return helaHoito;
-}}
+}
 
 //Hakee kaikki käyttäjänimet--Laura
 const kaikkiKayttajat = async () => {
@@ -75,7 +72,7 @@ const uudetPisteet = async (nimi, pointsit, pvm) => {
 
 //Hakee kysymysten lukumäärän--Laura
 const kysymystenMaara = async () => {
-    let maara = await allas.query("SELECT count(id) FROM kysymykset")
+    let maara = await allas.query("SELECT id FROM kysymykset ORDER BY RANDOM() LIMIT 5")
     return maara.rows;
 }
 
@@ -86,4 +83,4 @@ const uusiKayttaja = async (nimi) => {
 }
 
 //exportataan funktiot dao-palvelusta, jotta quiz.js voi käyttää niitä -Niina
-module.exports = {haePisteet, haeTopPisteet, haeKuukaudenPisteet, yhdenPisteet, haeKysymys, kaikkiKayttajat, kysymystenMaara, uusiKayttaja, uudetPisteet};
+module.exports = {haePisteet, haeTopPisteet, haeKuukaudenPisteet, yhdenPisteet, haeKysymykset, kaikkiKayttajat, kysymystenMaara, uusiKayttaja, uudetPisteet};
